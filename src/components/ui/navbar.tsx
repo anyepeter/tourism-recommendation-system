@@ -21,30 +21,30 @@ export default () => {
       { title: "Contact", path: "/contact" },
   ]
 
-  useEffect(() => {
+//   useEffect(() => {
       
-      const body = document.body
+//       const body = document.body
 
-      // Disable scrolling
-      const customBodyStyle = ["overflow-hidden", "lg:overflow-visible"]
-      if (state) body.classList.add(...customBodyStyle)
-      // Enable scrolling
-      else body.classList.remove(...customBodyStyle)
+//       // Disable scrolling
+//       const customBodyStyle = ["overflow-hidden", "lg:overflow-visible"]
+//       if (state) body.classList.add(...customBodyStyle)
+//       // Enable scrolling
+//       else body.classList.remove(...customBodyStyle)
 
-      // Sticky strick
-      const customStyle = ["sticky-nav", "fixed", "border-b"]
-      window.onscroll = () => {
-          if (window.scrollY > 80) navRef.current?.classList.add(...customStyle)
-          else navRef.current?.classList.remove(...customStyle)
-      }
-    }, [state])
+//       // Sticky strick
+//       const customStyle = ["sticky-nav", "fixed", "border-b"]
+//       window.onscroll = () => {
+//           if (window.scrollY > 100) navRef.current?.classList.add(...customStyle)
+//           else navRef.current?.classList.remove(...customStyle)
+//       }
+//     }, [state])
     
 
   return (
       <nav ref={navRef} className="bg-white w-full border-b-2 top-0 z-20 fixed ">
           <div className="items-center px-4 max-w-[1400px] mx-auto md:px-8 lg:flex">
               <div className="flex items-center justify-between py-3 lg:py-4 lg:block">
-                    <a href="javascript:void(0)">
+                    <a href="/">
                         <Image
                             src="/images/logo.png" 
                             width={80} 

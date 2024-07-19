@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import {
     Card,
@@ -10,6 +11,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { Heart } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 const lakes = [
     {
@@ -30,11 +32,14 @@ const lakes = [
     }
 ]
 
-export default function page() {
+export default function Page() {
+  const params = useParams()
+  const category = params.category
+
   return (  
-    <section className='w-full overflow-hidden sm:mt-10 lg:mt-10'>
+    <section className='w-full mt-[5rem] overflow-hidden  sm:mt-10 lg:mt-10'>
        <div className='relative'>
-        <h1 className=' text-white text-5xl lg:mt-8 lg:text-[68px] font-bold text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 tracking-wider'>Lakes</h1>
+        <h1 className=' text-white text-5xl lg:mt-8 lg:text-[68px] font-bold text-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 tracking-wider'>{category}</h1>
         <div className='w-full flex justify-center relative'>
             
             {lakes.map((lake) => (

@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="border-t border-gray-700 bg-[#0057A8]  mt-8 pt-8 text-center">
-          <p>© {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Tourism237. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -55,7 +55,7 @@ const Page: React.FC = () => {
   )
 
   return (
-    <main className='flex justify-center items-center'>
+    <main className='flex justify-center mt-24 items-center'>
       <div className='p-8 lg:mt-16 max-w-[1000px] flex flex-col gap-8'>
         <div className='flex w-full justify-center items-center flex-col'>
           <div>
@@ -67,7 +67,7 @@ const Page: React.FC = () => {
         </div>
 
         <div className='flex flex-col md:flex-row items-start gap-4 md:gap-6'>
-          <Image src='/images/mountain.png' width={50} height={50} alt='lake' />
+          <Image src='/images/icons8-lake-481.png' width={50} height={50} alt='lake' />
           <ul className='list-disc flex flex-col gap-4 '>
             <li>Nainital Lake, notably known as Naini Lake, is the main attraction of Nainital town as well as of Uttarakhand.</li>
             <li>It is located at an altitude of 3,500 meters in the Nainital district of Uttarakhand.</li>
@@ -77,7 +77,7 @@ const Page: React.FC = () => {
         </div>
 
         <div className='flex flex-col md:flex-row items-start gap-4 md:gap-6'>
-          <Image src='/images/mountain.png' width={50} height={50} alt='lake' />
+          <Image src='/images/icons8-adventure-481.png' width={50} height={50} alt='lake' />
           <div>
             <h2>Activities carry out</h2>
             <ul className='list-decimal flex flex-col gap-4 '>
@@ -92,7 +92,7 @@ const Page: React.FC = () => {
 
         <div className='flex flex-col lg:flex-row items-start gap-4 md:gap-6'>
           <div className='flex flex-col md:flex-row items-start gap-4 md:gap-6'>
-            <Image src='/images/mountain.png' width={50} height={50} alt='lake' />
+            <Image src='/images/icons8-hotel-641.png' width={50} height={50} alt='lake' />
             <div>
               <h2>Nearby Hotels</h2>
               <ul className='flex flex-col gap-4 w-full max-w-[400px]'>
@@ -113,7 +113,7 @@ const Page: React.FC = () => {
           </div>
 
           <div className='flex flex-col md:flex-row items-start gap-4 md:gap-6'>
-            <Image src='/images/mountain.png' width={50} height={50} alt='lake' />
+            <Image src='/images/icons8-location-481.png' width={50} height={50} alt='lake' />
             <div>
               <h2>Site Location</h2>
               <div>
@@ -160,7 +160,7 @@ const Page: React.FC = () => {
       </div>
 
       {showPopup && selectedHotel && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center pt-[30rem] pb-[10rem] overflow-scroll'>
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center pt-[30rem] pb-[10rem] overflow-scroll z-40'>
           <div className='bg-white p-8 rounded-lg max-w-md lg:max-w-xl'>
             <h2 className='text-2xl font-bold mb-4'>{selectedHotel.name}</h2>
             <p>{selectedHotel.stars} star hotel</p>
