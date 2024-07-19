@@ -82,3 +82,17 @@ h1{
 h2{
   @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 dark:text-white;
 }
+
+.sticky-nav {
+  animation: sticky-nav 300ms;
+}
+ 
+@keyframes sticky-nav {
+ 0% {
+     transform: translateY(-6em)
+ }
+
+ 100% {
+     transform: translateY(0)
+ }
+}

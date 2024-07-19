@@ -16,25 +16,25 @@ const category = [
     id: 1,
     name: "Lake",
     image: "/images/forest.png",
-    href: "/lake"
+    href: "lake"
   },
   {
     id: 2,
     name: "Beach",
     image: "/images/lake.png",
-    href: "/beach"
+    href: "beach"
   },
   {
     id: 3,
     name: "Mountain",
     image: "/images/mountain.png",
-    href: "/mountain"
+    href: "mountain"
   },
   {
     id: 4,
     name: "Forest",
     image: "/images/sea.png",
-    href: "/forest"
+    href: "forest"
   }
 ]
 export default function Home() {
@@ -59,7 +59,7 @@ export default function Home() {
         </CardHeader>
         <CardFooter className="flex flex-col justify-center items-center gap-3">
           <CardTitle>{item.name}</CardTitle>
-          <Link href={item.href} className="p-1 text-white bg-blue-800">
+          <Link href={`/${item.href}`} className="p-1 text-white bg-blue-800">
           Explore more
           </Link>
 
