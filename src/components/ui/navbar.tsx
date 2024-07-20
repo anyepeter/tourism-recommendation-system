@@ -75,12 +75,12 @@ export default () => {
                         <ul className="flex flex-col-reverse space-x-0 lg:space-x-6 lg:flex-row">
                          
                             <li className="mt-4 lg:mt-0">
-                                <a href="javascript:void(0)" className="py-3 px-4 text-center border text-gray-600 hover:text-indigo-600 rounded-md block lg:inline lg:border-0">
+                                <a href="/sign-in" className="py-3 px-4 text-center border text-gray-600 hover:text-indigo-600 rounded-md block lg:inline lg:border-0">
                                     Login
                                 </a>
                             </li>
                             <li className="mt-8 lg:mt-0">
-                                <a href="javascript:void(0)" className="py-3 px-4 text-center text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow block lg:inline">
+                                <a href="/sign-up" className="py-3 px-4 text-center text-white bg-indigo-600 hover:bg-indigo-700 rounded-md shadow block lg:inline">
                                     Sign Up
                                 </a>
                             </li>
