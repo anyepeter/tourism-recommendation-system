@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link";
+import { getAllUsers } from "@/actions/actions";
 
 
 
@@ -37,7 +38,11 @@ const category = [
     href: "forest"
   }
 ]
-export default function Home() {
+export default  async function Home() {
+
+  // const user = await getAllUsers()
+
+  // console.log(user)
 
   return (
    <section className="bg-cover w-full bg-opacity-90 bg-center min-h-screen" style={{ backgroundImage: "linear-gradient(rgba(255, 255, 225, 0.5), rgba(255, 255, 255, 0.5)), url('/images/background.png')" }}>
@@ -68,6 +73,8 @@ export default function Home() {
       </Card>
     ))}
   </ul>
+
+
     </main>
    </section>
   );

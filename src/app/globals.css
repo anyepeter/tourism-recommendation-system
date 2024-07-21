@@ -64,7 +64,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground ;
+    
   }
 }
 
@@ -96,3 +97,9 @@ h2{
      transform: translateY(0)
  }
 }
+
+.cl-internal-1j7ahlv {
+  width: 3rem;
+  height: 3rem;
+}
+
