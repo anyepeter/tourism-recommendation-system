@@ -1,19 +1,65 @@
+  generator client {
+    provider = "prisma-client-js"
+  }
 
+  datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+  }
 
-generator client {
-  provider = "prisma-client-js"
-}
+  model User {
+    userId      String   @id @default(cuid())
+    firstName   String?     
+    lastName    String?   
+    email       String   @unique
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    clerkUserId String?  @unique
+    sites Site[]
+  }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-model User {
-  userId      String   @id @default(cuid())
-  firstName   String?     
-  lastName    String?   
-  email       String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  clerkUserId String?  @unique
-}
+  model Category {
+    id   String @id @default(cuid())
+    name String
+    sites Site[]
+  }
+
+  model Section {
+    id   String @id @default(cuid())
+    name String
+   sites Site[]
+  }
+
+  model Hotel {
+    id       String   @id @default(cuid())
+    title    String
+    location String
+    rate     Float
+    price    Float
+    images   String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    site     Site     @relation(fields: [siteId], references: [id])
+    siteId   String
+  }
+
+  model Site {
+    id          String   @id @default(cuid())
+    title       String
+    description String[]
+    longitude   Float
+    latitude    Float
+    addresses   String
+    activities  String[]
+    images      String[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    user     User     @relation(fields: [userId], references: [userId])
+    userId   String
+    hotels   Hotel[]
+    section  Section  @relation(fields: [sectionId], references: [id])
+    sectionId String
+    category Category @relation(fields: [categoryId], references: [id])
+    categoryId String
+  }

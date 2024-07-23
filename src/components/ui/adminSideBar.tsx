@@ -9,7 +9,7 @@ import { Book } from 'lucide-react';
 import { AiFillAlert } from 'react-icons/ai';
 import { RxDropdownMenu } from 'react-icons/rx';
 
-const SideBar = () => {
+const AdminSideBar = () => {
 
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
@@ -18,7 +18,7 @@ const SideBar = () => {
   
   return (
     <div 
-    className="  fixed  top-20 bg-[#a1abd9] w-full z-[10] sm:h-screen sm:w-[20%] lg:max-w-[220px] pb-4"
+    className="bg-[#0D1431] w-full z-[10] sm:h-screen text-white   pb-4"
     >
       <div className='sm:hidden flex justify-between items-center pl-2 pr-2'>
       <p onClick={() => setToggleDropdown((prev) => !prev)} >Open Dashboard Navigation</p>
@@ -50,7 +50,7 @@ const SideBar = () => {
 
       )}
 
-<div className='sm:flex gap-2 mt-6 flex-col w-full hidden'>
+<div className='sm:flex gap-2 flex-col w-full hidden'>
         <h1 className=' p-2 md:p-6 w-full text-white text-[19px]'>Overview</h1>
         <ul className='border-t-[1px] w-full text-white border-gray-400 flex flex-col gap-1 pt-4 pb-4'>
           <li className='w-full flex'>
@@ -74,4 +74,4 @@ const SideBar = () => {
   )
 }
 
-export default SideBar
+export default AdminSideBar
