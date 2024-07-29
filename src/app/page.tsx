@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import {
   Card,
@@ -8,39 +9,59 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link";
+import { getAllSites } from "@/actions/actions";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { increment } from "./globalRedux/site/siteSlice";
 
 
 
 const category = [
   {
     id: 1,
-    name: "Lake",
+    name: "grass field",
     image: "/images/forest.png",
-    href: "/lake"
+    href: "grassfield"
   },
   {
     id: 2,
     name: "Beach",
     image: "/images/lake.png",
-    href: "/beach"
+    href: "beach"
   },
   {
     id: 3,
     name: "Mountain",
     image: "/images/mountain.png",
-    href: "/mountain"
+    href: "mountain"
   },
   {
     id: 4,
     name: "Forest",
     image: "/images/sea.png",
-    href: "/forest"
+    href: "forest"
   }
 ]
-export default function Home() {
+export default   function Home() {
+
+  const dispatch = useDispatch();
+  // const user = await getAllUsers()
+
+  useEffect(() => {
+    const fetchSites = async () => {
+      try {
+        const sitesData = await getAllSites()
+        dispatch(increment(sitesData))
+      } catch (error) {
+        console.error('Error fetching sites:', error)
+      }
+    }
+  
+    fetchSites()
+  }, [dispatch])
 
   return (
-   <section className="bg-cover w-full bg-opacity-90 bg-center min-h-screen" style={{ backgroundImage: "url('/images/background.png')" }}>
+   <section className="bg-cover w-full bg-opacity-90 bg-center min-h-screen" style={{ backgroundImage: "linear-gradient(rgba(255, 255, 225, 0.5), rgba(255, 255, 255, 0.5)), url('/images/background.png')" }}>
     <div className="p-4 pl-6">
     <Image src="/images/logo.png" width={100} height={100} alt="logo"/>
     </div>
@@ -59,7 +80,7 @@ export default function Home() {
         </CardHeader>
         <CardFooter className="flex flex-col justify-center items-center gap-3">
           <CardTitle>{item.name}</CardTitle>
-          <Link href={item.href} className="p-1 text-white bg-blue-800">
+          <Link href={`/${item.href}`} className="p-1 text-white bg-blue-800">
           Explore more
           </Link>
 
@@ -68,6 +89,8 @@ export default function Home() {
       </Card>
     ))}
   </ul>
+
+
     </main>
    </section>
   );
