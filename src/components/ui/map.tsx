@@ -48,15 +48,15 @@ function GooglesDetails({ service }: { service: ServiceProps }): JSX.Element {
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={service.position}
-      zoom={13}
+      zoom={9}
     >
-      {markers.map((marker) => (
+    
         <MarkerF
-          key={marker.id}
-          position={marker.position}
+         
+          position={service.position}
          
         />
-      ))}
+    
     
     </GoogleMap>
   ) : (

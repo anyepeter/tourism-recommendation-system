@@ -4,23 +4,63 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
+import { useDispatch, useSelector } from'react-redux'
+import { getAllSites, getUser } from '@/actions/actions'
+import { addUser, increment } from '../../app/globalRedux/site/siteSlice'
 
 
 export default () => {
     const pathname = usePathname()
     const [state, setState] = useState(false)
     const navRef = useRef<HTMLElement>(null)
+    const dispatch = useDispatch()
+    const { user } = useUser()
+
+    const userId = user?.id; // or user?.email or user?.clerkUserId based on your setup
 
     // Replace javascript:void(0) path with your path
     const navigation = [
-        { title: "Lakes", path: "/lake" },
-        { title: "Mountains", path: "/mountain" },
-        { title: "Beach", path: "/beach" },
-        { title: "Forest", path: "/forest" },
-        { title: "About", path: "/about" },
-        { title: "Contact", path: "/contact" },
-    ]
+      { title: "Lakes", path: "/lake" },
+      { title: "Mountains", path: "/mountain" },
+      { title: "Beach", path: "/beach" },
+      { title: "Forest", path: "/forest" },
+      { title: "About", path: "/about" },
+      { title: "Contact", path: "/contact" },
+    ];
+  
+    useEffect(() => {
+      const fetchUser = async () => {
+        if (!userId) {
+          console.error('User ID is missing');
+          return;
+        }
+  
+        try {
+          const userData = await getUser(userId); // Assuming getUser expects an object with userId
+          dispatch(addUser(userData));
+        } catch (error) {
+          console.error('Error fetching user:', error);
+        }
+      };
+  
+      fetchUser();
+    }, [userId, dispatch]);
+
+    useEffect(() => {
+        const fetchSites = async () => {
+          try {
+            const sitesData = await getAllSites()
+            dispatch(increment(sitesData))
+          } catch (error) {
+            console.error('Error fetching sites:', error)
+          }
+        }
+      
+        fetchSites()
+      }, [dispatch])
+
+    
 
     //   useEffect(() => {
 

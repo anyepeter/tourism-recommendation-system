@@ -1,11 +1,10 @@
+'use client'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 export default function page() {
-  const comments = [
-    { siteName: 'Example Site 1', description: 'This is a great site!  bufger eigeryigf  etrefb erfterifb ', date: '2023-05-01' },
-    { siteName: 'Example Site 2 ', description: 'Needs improvement', date: '2023-05-02' },
-    { siteName: 'Example Site 3', description: 'Very informative', date: '2023-05-03' },
-  ]
+  const user = useSelector((state) => state.site.user)
+
 
   return (
     <section className=' w-[100%] mt-[7.5rem] sm:mt-[5rem] sm:w-[80%]  md-[1000px]:w-[82%]  lg:max-w-[1000px]  p-4   sm:p-8  float-right'>
@@ -22,13 +21,18 @@ export default function page() {
                 </tr>
               </thead>
               <tbody className="text-gray-600 divide-sky-50 divide-y">
-                {comments.map((comment, index) => (
+                {
+                  user.comments?.length > 0 ? (
+                user.comments?.map((comment, index) => (
                   <tr key={index} >
-                    <td className="border-none p-6">{comment.siteName}</td>
-                    <td className='border-none p-6'>{comment.description}</td>
-                    <td className='border-none p-6'>{comment.date}</td>
+                    <td className="border-none p-6">{comment.site.title}</td>
+                    <td className='border-none p-6'>{comment.content}</td>
+                    <td className='border-none p-6'>{new Date(comment.createdAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                   </tr>
-                ))}
+                ))
+              ) : ( <tr>
+                <td colSpan={4} className="border-none p-6 text-center">No comments yet</td>
+            </tr>)}
               </tbody>
             </table>
           </div>

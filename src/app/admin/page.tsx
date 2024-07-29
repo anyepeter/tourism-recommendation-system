@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardContent } from '@/components/ui/card'
 import { HotelIcon, HousePlusIcon, User2 } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BiCommentCheck } from 'react-icons/bi'
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
@@ -13,41 +13,72 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+import { getAllBooks, getAllComments, getAllHotels, getAllSites, getAllUsers } from '@/actions/actions'
 
 const chartData = [
-    { month: "January", lake: 186, mountain: 80, beach: 86, forest: 180 },
-    { month: "February", lake: 305, mountain: 200,beach: 10, forest: 80 },
-    { month: "March", lake: 237, mountain: 120,beach: 96, forest: 10 },
-    { month: "April", lake: 73, mountain: 190, beach: 100, forest: 50 },
-    { month: "May", lake: 209, mountain: 130, beach: 150, forest: 180 },
-    { month: "June", lake: 214, mountain: 140, beach: 286, forest: 180 },
+    { month: "January", SudanoSahelian: 186, FangBeti: 80, Sawa: 86, Grassfield: 180 },
+    { month: "February", SudanoSahelian: 305, FangBeti: 200,Sawa: 10, Grassfield: 80 },
+    { month: "March", SudanoSahelian: 237, FangBeti: 120,Sawa: 96, Grassfield: 10 },
+    { month: "April", SudanoSahelian: 73, FangBeti: 190, Sawa: 100, Grassfield: 50 },
+    { month: "May", SudanoSahelian: 209, FangBeti: 130, Sawa: 150, Grassfield: 180 },
+    { month: "June", SudanoSahelian: 214, FangBeti: 140, Sawa: 286, Grassfield: 180 },
 ]
 
 const chartConfig = {
-    lake: {
-        label: "Lake",
+    SudanoSahelian: {
+        label: "SudanoSahelian",
         color: "#2563eb",
     },
-    mountain: {
-        label: "Mountain",
+    FangBeti: {
+        label: "FangBeti",
         color: "#60a5fa",
     },
-    beach: {
-        label: "beach",
+    Sawa: {
+        label: "Sawa",
         color: "#7166B8",
     },
-    forest: {
-        label: "Forest",
+    Grassfield: {
+        label: "Grassfield",
         color: "#25C24F",
     },
 } satisfies ChartConfig
 
 
 
-export default function page() {
+export default  function page() {
+    const [users, setUsers] = React.useState([])
+    const [sites, setSites] = React.useState([])
+    const [comments, setComments] = React.useState([])
+    const [hotels, setHotels] = React.useState([])
+    const [books, setBook] = React.useState([])
 
 
-    const comments = [
+    useEffect(() => {
+        const fetchData = async () => {
+            setUsers(await getAllUsers())
+            setComments(await getAllComments())
+            setBook(await getAllBooks())
+
+        }
+            fetchData()
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setSites(await getAllSites())
+        }
+            fetchData()
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setHotels(await getAllHotels())
+        }
+            fetchData()
+    }, [])
+
+
+    const commentsData = [
         { userName: 'John Doe', comment: 'Great article!', date: '2023-06-01', site: 'Blog A' },
         { userName: 'Jane Smith', comment: 'Very informative', date: '2023-06-02', site: 'Blog B' },
         { userName: 'Mike Johnson', comment: 'Could use more details', date: '2023-06-03', site: 'Blog C' },
@@ -65,7 +96,7 @@ export default function page() {
                             <User2 className='text-white w-[42px]' />
                         </div>
                         <div className='p-1 pb-2'>
-                            <p className='text-3xl'>0</p>
+                            <p className='text-3xl'>{users.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Users</h3>
 
                         </div>
@@ -78,7 +109,7 @@ export default function page() {
                             <HousePlusIcon className='text-white w-[42px]' />
                         </div>
                         <div className='p-1 pb-2'>
-                            <p className='text-3xl'>0</p>
+                            <p className='text-3xl'>{sites.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Sites</h3>
 
                         </div>
@@ -91,7 +122,7 @@ export default function page() {
                             <BiCommentCheck className='text-white text-2xl  w-[42px]' />
                         </div>
                         <div className='p-1 pb-2'>
-                            <p className='text-3xl'>0</p>
+                            <p className='text-3xl'>{comments.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Comments</h3>
 
                         </div>
@@ -104,7 +135,7 @@ export default function page() {
                             <HotelIcon className='text-white w-[42px]' />
                         </div>
                         <div className='p-1 pb-2'>
-                            <p className='text-3xl'>0</p>
+                            <p className='text-3xl'>{hotels.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Hotels</h3>
 
                         </div>
@@ -127,10 +158,10 @@ export default function page() {
                             />
                             <ChartTooltip content={<ChartTooltipContent />} />
                             <ChartLegend content={<ChartLegendContent />} />
-                            <Bar dataKey="lake" fill="var(--color-lake)" radius={1} />
-                            <Bar dataKey="mountain" fill="var(--color-mountain)" radius={1} />
-                            <Bar dataKey="beach" fill="var(--color-beach)" radius={1} />
-                            <Bar dataKey="forest" fill="var(--color-forest)" radius={1} />
+                            <Bar dataKey="SudanoSahelian" fill="var(--color-SudanoSahelian)" radius={1} />
+                            <Bar dataKey="FangBeti" fill="var(--color-FangBeti)" radius={1} />
+                            <Bar dataKey="Sawa" fill="var(--color-Sawa)" radius={1} />
+                            <Bar dataKey="Grassfield" fill="var(--color-Grassfield)" radius={1} />
                         </BarChart>
                     </ChartContainer>
 
@@ -150,15 +181,20 @@ export default function page() {
                             </tr>
                         </thead>
                         <tbody className="text-gray-600 divide-sky-50 divide-y">
-                            {comments.map((comment, index) => (
-                                <tr key={index} >
-                                    <td className="border-none p-6">{comment.userName}</td>
-                                    <td className='border-none p-6'>{comment.comment}</td>
-                                    <td className='border-none p-6'>{comment.date}</td>
-                                    <td className='border-none p-6'>{comment.date}</td>
+                            {books.length > 0 ? (
+                                books.map((book, index) => (
+                                    <tr key={index} >
+                                        <td className="border-none p-6">{book.user.firstName}</td>
+                                        <td className='border-none p-6'>{book.hotel.title}</td>
+                                        <td className='border-none p-6'>{new Date(book.startDate).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                        <td className='border-none p-6'>{new Date(book.endDate).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={4} className="border-none p-6 text-center">No reservations</td>
                                 </tr>
-                            ))}
-                        </tbody>
+                            )}                        </tbody>
                     </table>
 
                 </Card>
@@ -180,15 +216,20 @@ export default function page() {
                             </tr>
                         </thead>
                         <tbody className="text-gray-600 divide-sky-50 divide-y">
-                            {comments.map((comment, index) => (
-                                <tr key={index} >
-                                    <td className="border-none p-6">{comment.userName}</td>
-                                    <td className='border-none p-6'>{comment.comment}</td>
-                                    <td className='border-none p-6'>{comment.comment}</td>
-                                    <td className='border-none p-6'>{comment.date}</td>
+                            {comments.length > 0 ? (
+                                comments.map((comment, index) => (
+                                    <tr key={index}>
+                                        <td className="border-none p-6">{comment.user.firstName}</td>
+                                        <td className='border-none p-6'>{comment.site.title}</td>
+                                        <td className='border-none p-6'>{comment.content}</td>
+                                        <td className='border-none p-6'>{new Date(comment.createdAt).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={4} className="border-none p-6 text-center">No comments</td>
                                 </tr>
-                            ))}
-                        </tbody>
+                            )}                        </tbody>
                     </table>
 
                 </Card>

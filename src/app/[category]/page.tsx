@@ -12,6 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Heart } from 'lucide-react'
 import { useParams } from 'next/navigation'
+import { useSelector } from 'react-redux'
 
 const lakes = [
     {
@@ -33,8 +34,18 @@ const lakes = [
 ]
 
 export default function Page() {
+
   const params = useParams()
   const category = params.category
+
+
+  const sites = useSelector((state) => state.site.sites)
+
+  console.log(sites)
+  const filteredSites = sites.filter(site => site.category.name === category);
+
+  console.log(filteredSites)
+  
 
   return (  
     <section className='w-full mt-[5rem] overflow-hidden  sm:mt-10 lg:mt-10'>
@@ -51,26 +62,38 @@ export default function Page() {
         </div>
         </div>
 
+
         <main className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 lg:p-12">
-            <Card className='flex flex-col justify-center items-center gap-1  border-none'>
-                <CardHeader>
-                    <CardTitle>Nanital Lake</CardTitle>
-                </CardHeader>
-                  <div className='relative'>
-                    <Heart className='text-white absolute left-4 bottom-4' />
-                    <Image className='object-cover object-center lg:w-[450px]' src='/images/lake.png' width={400} height={100} alt='lake' />
-                    </div>
-                <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                    Nainital Lake, famously known as Naini Lake is the major attraction of Nanital town as well of Uttarakhand. Surrounded by panoramic seven hills, Nainital lake is a favourite spot among romantic travellers around the world. It is one of the most visited lakes in India
-                </CardDescription>
-                <CardFooter>
-                    <Link className='text-blue-800' href='/lake/nanital'>Read More</Link>
-                </CardFooter>
-            </Card>
+
+            {
+                filteredSites.map((site) => (
+                    <Card className='flex flex-col justify-between items-center gap-1  border-none'>
+                    <CardHeader>
+                        <CardTitle>{site.title}</CardTitle>
+                    </CardHeader>
+                      <div className='relative'>
+                        <Heart className='text-white absolute left-4 bottom-4' />
+                        <Image className='object-cover object-center lg:w-[450px]' src={site.images[0]} width={400} height={100} alt='lake' />
+                        </div>
+                    <CardDescription className='p-3 text-center w-full max-w-[400px]'>
+                        {site.description}
+                    </CardDescription>
+                    <CardFooter>
+                        <Link className='text-blue-800' href={
+                            {  pathname: `/${category}/${site.title}`,
+                               query: {
+                                    site: JSON.stringify(site),
+                                },
+                            }}>Read More</Link>
+                    </CardFooter>
+                </Card>
+                ))
+            }
+
 
           
 
-            <Card className='flex flex-col justify-center items-center gap-1  border-none'>
+            <Card className='flex flex-col justify-between items-center gap-1  border-none'>
                 <CardHeader>
                     <CardTitle>Nanital Lake</CardTitle>
                 </CardHeader>

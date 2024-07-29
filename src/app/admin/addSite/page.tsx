@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm, Controller, SubmitHandler, useFieldArray } from "react-hook-form"
 import {
     Select,
@@ -13,8 +13,11 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea';
+import { uploadImagesAndGetUrls } from '@/components/uploadImages';
 import { Button } from '@/components/ui/button';
-import { createSiteWithHotels, getAllSites } from '@/actions/actions';
+import { createSiteWithHotels, getAllCategories, getAllSections, getAllSites } from '@/actions/actions';
+import { Loader2 } from "lucide-react"
+import { toast } from 'react-hot-toast';
 
 interface IFormInput {
     title: string
@@ -26,20 +29,31 @@ interface IFormInput {
     address: string
     activities: string[]
     images: FileList
-    hotel: [{
+    hotel: Array<{
         name: string
         hotel_address: string
         price: number
         rate: number
         hotel_images: FileList
-    }]
+    }>
 }
 
 export default function Page() {
     const [descriptionCount, setDescriptionCount] = useState(1);
-    const [activityCount, setActivities] = useState(1)
+    const [activityCount, setActivities] = useState(1);
+    const [sections, setSection] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const { control, register, handleSubmit } = useForm<IFormInput>({
+    useEffect(() => {
+        const fetchCategoriesAndSection = async () => {
+            setCategories(await getAllCategories());
+            setSection(await getAllSections());
+        };
+        fetchCategoriesAndSection();
+    }, []);
+
+    const { control, register, handleSubmit, reset } = useForm<IFormInput>({
         defaultValues: {
             title: "",
             category: "",
@@ -65,29 +79,38 @@ export default function Page() {
         name: "hotel"
     });
 
+
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-        
-        console.log(data);
-        const siteImages = Array.from(data.images).map(file => URL.createObjectURL(file));
-        const hotels = await Promise.all(
-            data.hotel.map(async (hotel) => ({
-              ...hotel,
-              price: parseFloat(hotel.price.toString()),
-              rate: parseFloat(hotel.rate.toString()),
-              hotel_images: await Promise.all(
-                Array.from(hotel.hotel_images).map(file => URL.createObjectURL(file))
-              )
-            }))
-          );
-        const formDat = {
-            ...data,
-            lat: parseFloat(data.lat.toString()),
-            lng: parseFloat(data.lng.toString()),
-            images: siteImages,
-            hotel: hotels
-        };
-      
-       await createSiteWithHotels(formDat);
+        setIsSubmitting(true);
+        try {
+            const siteImages = await uploadImagesAndGetUrls(Array.from(data.images), 'toursim-images');
+            const hotels = await Promise.all(
+                data.hotel.map(async (hotel) => ({
+                  ...hotel,
+                  price: parseFloat(hotel.price.toString()),
+                  rate: parseFloat(hotel.rate.toString()),
+                  hotel_images: await uploadImagesAndGetUrls(Array.from(hotel.hotel_images), 'toursim-images')
+                }))
+            );
+            const formDat = {
+                ...data,
+                lat: parseFloat(data.lat.toString()),
+                lng: parseFloat(data.lng.toString()),
+                images: siteImages,
+                hotel: hotels
+            };
+
+            console.log(formDat)
+          
+           await createSiteWithHotels(formDat);
+           toast.success("The site was created successfully.")
+           reset();
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred while creating the site.")
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     const addDescription = () => {
@@ -99,7 +122,6 @@ export default function Page() {
             setDescriptionCount(prevCount => prevCount - 1);
         }
     }
-    
 
     const addActivity = () => {
         setActivities(prevCount => prevCount + 1);
@@ -127,7 +149,7 @@ export default function Page() {
                                 <Controller
                                     name="title"
                                     control={control}
-                                    render={({ field }) => <Input className='md:h-14' {...field} />}
+                                    render={({ field }) => <Input className='md:h-14' required {...field} />}
                                 />
                             </div>
 
@@ -137,18 +159,18 @@ export default function Page() {
                                     name="category"
                                     control={control}
                                     render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                                        <Select onValueChange={field.onChange} required value={field.value}>
                                             <SelectTrigger className="w-full md:h-14 lg:w-[200px]">
-                                                <SelectValue placeholder="Select a fruit" />
+                                                <SelectValue placeholder="Select a category" />
+
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                    <SelectLabel>Fruits</SelectLabel>
-                                                    <SelectItem value="apple">Apple</SelectItem>
-                                                    <SelectItem value="banana">Banana</SelectItem>
-                                                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                                                    <SelectItem value="grapes">Grapes</SelectItem>
-                                                    <SelectItem value="pineapple">Pineapple</SelectItem>
+                                                    {
+                                                        categories.map((category: { id: number, name: string }, index: number) => (
+                                                            <SelectItem key={index} value={category.id}>{category.name}</SelectItem>
+                                                        ))
+                                                    }
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -162,18 +184,19 @@ export default function Page() {
                                     name="type"
                                     control={control}
                                     render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                                        <Select onValueChange={field.onChange} required value={field.value}>
                                             <SelectTrigger className="w-full md:h-14 lg:w-[200px]">
-                                                <SelectValue placeholder="Select a fruit" />
+                                                <SelectValue placeholder="Select a type" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                    <SelectLabel>Fruits</SelectLabel>
-                                                    <SelectItem value="apple">Apple</SelectItem>
-                                                    <SelectItem value="banana">Banana</SelectItem>
-                                                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                                                    <SelectItem value="grapes">Grapes</SelectItem>
-                                                    <SelectItem value="pineapple">Pineapple</SelectItem>
+
+                                                    {
+                                                        sections.map((section: { id: number, name: string }, index: number) => (
+                                                            <SelectItem key={index} value={section.id}>{section.name}</SelectItem>
+                                                        ))
+                                                    }
+
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -190,7 +213,7 @@ export default function Page() {
                                     key={index}
                                     name={`description.${index}`}
                                     control={control}
-                                    render={({ field }) => <Textarea {...field} className="mb-2" />}
+                                    render={({ field }) => <Textarea {...field} required className="mb-2" />}
                                 />
                             ))}
                             <div className='flex gap-4'>
@@ -210,7 +233,7 @@ export default function Page() {
                                     <Controller
                                         name="address"
                                         control={control}
-                                        render={({ field }) => <Input className='md:h-14' {...field} />}
+                                        render={({ field }) => <Input className='md:h-14' required {...field} />}
                                     />
                                 </div>
 
@@ -221,7 +244,7 @@ export default function Page() {
                                     <Controller
                                         name="lng"
                                         control={control}
-                                        render={({ field }) => <Input className='md:h-14' type='number' {...field} />}
+                                        render={({ field }) => <Input className='md:h-14' type='number' required {...field} />}
                                     />
                                 </div>
 
@@ -230,7 +253,7 @@ export default function Page() {
                                     <Controller
                                         name="lat"
                                         control={control}
-                                        render={({ field }) => <Input className='md:h-14' type='number' {...field} />}
+                                        render={({ field }) => <Input className='md:h-14' type='number' required {...field} />}
                                     />
                                 </div>
                                 </div>
@@ -268,6 +291,7 @@ export default function Page() {
                                     render={({ field }) => (
                                         <Input className='md:h-14'
                                             type='file' 
+                                                required
                                             multiple 
                                             onChange={(e) => {
                                                 const files = Array.from(e.target.files || []);
@@ -300,7 +324,7 @@ export default function Page() {
                                         <Controller
                                             name={`hotel.${index}.hotel_address`}
                                             control={control}
-                                            render={({ field }) => <Input className='md:h-14' {...field} />}
+                                            render={({ field }) => <Input required className='md:h-14' {...field} />}
                                         />
                                     </div>
                                     </div>
@@ -311,7 +335,7 @@ export default function Page() {
                                         <Controller
                                             name={`hotel.${index}.price`}
                                             control={control}
-                                            render={({ field }) => <Input className='md:h-14' type='number' {...field} />}
+                                            render={({ field }) => <Input required className='md:h-14' type='number' {...field} />}
                                         />
                                     </div>
 
@@ -320,7 +344,7 @@ export default function Page() {
                                         <Controller
                                             name={`hotel.${index}.rate`}
                                             control={control}
-                                            render={({ field }) => <Input className='md:h-14' type='number' {...field} />}
+                                            render={({ field }) => <Input required className='md:h-14' type='number' {...field} />}
                                         />
                                     </div>
                                     </div>
@@ -333,6 +357,7 @@ export default function Page() {
                                                 <Input className='md:h-14'
                                                     type='file'
                                                     multiple
+                                                    required
                                                     onChange={(e) => {
                                                         const files = Array.from(e.target.files || []);
                                                         field.onChange(files);
@@ -367,7 +392,16 @@ export default function Page() {
                         </div>
 
                         <div className='mt-12 flex justify-center  '>
-                        <Button className='bg-blue-800 w-full max-w-2xl' type="submit">Submit</Button>
+                        <Button className='bg-blue-800 w-full max-w-2xl' type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Please wait
+                                </>
+                            ) : (
+                                'Submit'
+                            )}
+                        </Button>
                         </div>
 
                         
