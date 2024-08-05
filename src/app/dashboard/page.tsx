@@ -64,7 +64,7 @@ useEffect(() => {
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 p-4 lg:p-6'>
             {
-              sites?.length > 0 ? sites?.map((site) => (
+              sites?.length > 0 ? sites?.slice(0, 4).map((site) => (
                 <Card key={site.id} className='flex flex-col justify-center items-center gap-1 border-none'>
                   <CardHeader>
                       <CardTitle>{site.title}</CardTitle>
@@ -74,7 +74,7 @@ useEffect(() => {
                       <Image className='object-cover object-center lg:w-[450px]' src={site?.images[0]} width={400} height={100} alt={site.title} />
                       </div>
                   <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                      {site.description}
+                      {site.description[0]}
                   </CardDescription>
                   <CardFooter>
                       <Link className='text-blue-800' href={`/site/${site._id}`}>Read More</Link>

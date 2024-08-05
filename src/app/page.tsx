@@ -25,21 +25,21 @@ const category = [
   },
   {
     id: 2,
-    name: "Beach",
+    name: "sawa area",
     image: "/images/lake.png",
-    href: "beach"
+    href: "sawa"
   },
   {
     id: 3,
-    name: "Mountain",
+    name: "fang beti area",
     image: "/images/mountain.png",
-    href: "mountain"
+    href: "fang-beti"
   },
   {
     id: 4,
-    name: "Forest",
+    name: "sudano sahelian",
     image: "/images/sea.png",
-    href: "forest"
+    href: "sudano-sahelian"
   }
 ]
 export default   function Home() {
@@ -69,18 +69,18 @@ export default   function Home() {
     <main className=" w-full p-8 sm:p-12 justify-center items-center flex flex-col pt-10 gap-12 lg:gap-20">
       <div className="flex flex-col text-blue-800 gap-2 sm:gap-4 lg:gap-7 w-full">
     <h1 className="text-4xl sm:text-5xl lg:text-[64px]">Come with us!</h1>
-    <h1 className="text-2xl sm:text-4xl gap-4 flex lg:text-[64px] items-center">Let’s Explore <span className="font-extrabold text-4xl lg:text-[64px]  sm:text-6xl">Cameroon</span></h1>
+    <h1 className="text-2xl sm:text-4xl gap-4 flex lg:text-[64px] items-center">Let's Explore <span className="font-extrabold text-4xl lg:text-[64px]  sm:text-6xl">Cameroon</span></h1>
      <h1 className="text-4xl sm:text-5xl lg:text-[64px]">Together!!</h1>
 </div>
   <ul className="flex flex-col sm:flex-row gap-9 lg:gap-14 justify-center items-center sm:flex-wrap lg:flex-nowrap md:flex-row">
     {category.map((item) => (
-      <Card key={item.id} className="flex flex-col gap-4 rounded-none ">
+      <Card key={item.id} className="flex flex-col gap-4 rounded-none transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
         <CardHeader className="p-0 m-0">
           <Image src={item.image} width={300} height={400} alt="background" />
         </CardHeader>
         <CardFooter className="flex flex-col justify-center items-center gap-3">
           <CardTitle>{item.name}</CardTitle>
-          <Link href={`/${item.href}`} className="p-1 text-white bg-blue-800">
+          <Link href={`/${item.href}`} className="p-1 text-white bg-blue-800 hover:bg-blue-600 transition-colors duration-300">
           Explore more
           </Link>
 
