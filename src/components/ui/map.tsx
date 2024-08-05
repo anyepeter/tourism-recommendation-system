@@ -36,7 +36,7 @@ function GooglesDetails({ service }: { service: ServiceProps }): JSX.Element {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyAFMbjca_jtUOeaQoeBZIiDbXmdyrN0Di0"
+    googleMapsApiKey: "AIzaSyAY_wThFJrTUXyi5KYsXTtWDzTBdPE3FQ8"
   });
 
 

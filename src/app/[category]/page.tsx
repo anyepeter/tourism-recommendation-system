@@ -73,10 +73,10 @@ export default function Page() {
                     </CardHeader>
                       <div className='relative'>
                         <Heart className='text-white absolute left-4 bottom-4' />
-                        <Image className='object-cover object-center lg:w-[450px]' src={site.images[0]} width={400} height={100} alt='lake' />
+                        <Image className='object-cover object-center lg:h-[300px] lg:w-[400px]' src={site.images[0]} width={400} height={100} alt='lake' />
                         </div>
                     <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                        {site.description}
+                        {site.description[0]}
                     </CardDescription>
                     <CardFooter>
                         <Link className='text-blue-800' href={
@@ -90,55 +90,6 @@ export default function Page() {
                 ))
             }
 
-
-          
-
-            <Card className='flex flex-col justify-between items-center gap-1  border-none'>
-                <CardHeader>
-                    <CardTitle>Nanital Lake</CardTitle>
-                </CardHeader>
-                  <div className='relative'>
-                    <Heart className='text-white absolute left-4 bottom-4' />
-                    <Image className='object-cover object-center lg:w-[450px]' src='/images/lake.png' width={400} height={100} alt='lake' />
-                    </div>
-                <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                    Nainital Lake, famously known as Naini Lake is the major attraction of Nanital town as well of Uttarakhand. Surrounded by panoramic seven hills, Nainital lake is a favourite spot among romantic travellers around the world. It is one of the most visited lakes in India
-                </CardDescription>
-                <CardFooter>
-                    <Link className='text-blue-800' href='#'>Read More</Link>
-                </CardFooter>
-            </Card>
-            <Card className='flex flex-col justify-center items-center gap-1  border-none'>
-                <CardHeader>
-                    <CardTitle>Nanital Lake</CardTitle>
-                </CardHeader>
-                  <div className='relative'>
-                    <Heart className='text-white absolute left-4 bottom-4' />
-                    <Image className='object-cover object-center lg:w-[450px]' src='/images/lake.png' width={400} height={100} alt='lake' />
-                    </div>
-                <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                    Nainital Lake, famously known as Naini Lake is the major attraction of Nanital town as well of Uttarakhand. Surrounded by panoramic seven hills, Nainital lake is a favourite spot among romantic travellers around the world. It is one of the most visited lakes in India
-                </CardDescription>
-                <CardFooter>
-                    <Link className='text-blue-800' href='#'>Read More</Link>
-                </CardFooter>
-            </Card>
-
-            <Card className='flex flex-col justify-center items-center gap-1  border-none'>
-                <CardHeader>
-                    <CardTitle>Nanital Lake</CardTitle>
-                </CardHeader>
-                  <div className='relative'>
-                    <Heart className='text-white absolute left-4 bottom-4' />
-                    <Image className='object-cover object-center lg:w-[450px]' src='/images/lake.png' width={400} height={100} alt='lake' />
-                    </div>
-                <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                    Nainital Lake, famously known as Naini Lake is the major attraction of Nanital town as well of Uttarakhand. Surrounded by panoramic seven hills, Nainital lake is a favourite spot among romantic travellers around the world. It is one of the most visited lakes in India
-                </CardDescription>
-                <CardFooter>
-                    <Link className='text-blue-800' href='#'>Read More</Link>
-                </CardFooter>
-            </Card>
             </main>
     </section>
   )

@@ -79,7 +79,31 @@ const Page: React.FC = () => {
             <div className=''>
               <h2 className='w-[300px] p-2 self-end bg-[#5C8C26B2] lg:text-4xl text-white'>{siteData.title}</h2>
             </div>
-            <Image src={siteData.images[0]} className='md:w-[700px] lg:w-[850px]' width={400} height={400} alt='lake' />
+                  <Carousel 
+                  plugins={[plugin.current]}
+                  className="w-full h-auto"
+                  onMouseEnter={plugin.current.stop}
+                  onMouseLeave={plugin.current.reset}
+                >
+                   <CarouselContent>
+                    {
+                      siteData.images.map((image, index) => {
+                        return(
+                          <CarouselItem key={index}>
+                            <div className="w-full h-[200px]  lg:h-[500px] flex justify-center items-center">
+                            <Image key={index} src={image} className='md:w-[700px] lg:h-[500px] lg:w-[950px]' width={400} height={400} alt='lake' />
+                            </div>
+                          </CarouselItem>
+                          
+                        )
+                      })
+                    }
+                   </CarouselContent>
+                   <CarouselPrevious />
+                   <CarouselNext />
+                
+                  </Carousel>
+            {/* <Image src={siteData.images[0]} className='md:w-[700px] lg:w-[850px]' width={400} height={400} alt='lake' /> */}
           </div>
         </div>
 
