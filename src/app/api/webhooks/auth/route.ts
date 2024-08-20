@@ -1,10 +1,11 @@
 // @ts-nocheck
-import { prisma } from '@/lib/db';
+// import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 
-
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
