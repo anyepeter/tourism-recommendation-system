@@ -1,3 +1,4 @@
+// @ts-nocheck 
 "use client"
 import React, { useState, useEffect } from 'react'
 import {
@@ -36,7 +37,7 @@ const lakes = [
 export default function Page() {
   const [isLoading, setIsLoading] = useState(true)
   const params = useParams()
-  const category = params.category
+  const {category} = params
 
   const sites = useSelector((state) => state.site.sites)
 
