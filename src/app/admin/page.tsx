@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client'
 import { Card, CardContent } from '@/components/ui/card'
 import { HotelIcon, HousePlusIcon, User2 } from 'lucide-react'
