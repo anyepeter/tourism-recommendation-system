@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs'
 import { useDispatch, useSelector } from'react-redux'
@@ -12,6 +12,7 @@ import { addUser, increment } from '../../app/globalRedux/site/siteSlice'
 
 export default () => {
     const pathname = usePathname()
+    const router = useRouter()
     const [state, setState] = useState(false)
     const navRef = useRef<HTMLElement>(null)
     const dispatch = useDispatch()
@@ -21,10 +22,10 @@ export default () => {
 
     // Replace javascript:void(0) path with your path
     const navigation = [
-      { title: "Lakes", path: "/lake" },
-      { title: "Mountains", path: "/mountain" },
-      { title: "Beach", path: "/beach" },
-      { title: "Forest", path: "/forest" },
+      { title: "Grassfield", path: "/grassfield" },
+      { title: "Sawa", path: "/sawa" },
+      { title: "Fang beti", path: "/fang-beti" },
+      { title: "Sudano", path: "/sudano-sahelian" },
       { title: "About", path: "/about" },
       { title: "Contact", path: "/contact" },
     ];
@@ -60,26 +61,15 @@ export default () => {
         fetchSites()
       }, [dispatch])
 
-    
 
-    //   useEffect(() => {
 
-    //       const body = document.body
-
-    //       // Disable scrolling
-    //       const customBodyStyle = ["overflow-hidden", "lg:overflow-visible"]
-    //       if (state) body.classList.add(...customBodyStyle)
-    //       // Enable scrolling
-    //       else body.classList.remove(...customBodyStyle)
-
-    //       // Sticky strick
-    //       const customStyle = ["sticky-nav", "fixed", "border-b"]
-    //       window.onscroll = () => {
-    //           if (window.scrollY > 100) navRef.current?.classList.add(...customStyle)
-    //           else navRef.current?.classList.remove(...customStyle)
-    //       }
-    //     }, [state])
-
+    const handleDashboardClick = () => {
+        if (user?.id === 'user_2kLCMG7aZI6RRqCy4pK8FgnffaZ') {
+            router.push('/admin')
+        } else {
+            router.push('/dashboard')
+        }
+    }
 
     return (
         <nav ref={navRef} className="bg-white w-full border-b-2 top-0 z-20 fixed ">
@@ -131,9 +121,9 @@ export default () => {
                             </SignedOut>
                             <SignedIn>
                             <li className="mt-4 lg:mt-0">
-                                <a href="/dashboard" className="py-3 px-4 text-center text-white bg-indigo-600 border text-gray-600 hover:text-gray-300 rounded-md block lg:inline lg:border-0">
+                                <button onClick={handleDashboardClick} className="py-3 px-4 text-center text-white bg-indigo-600 border text-gray-600 hover:text-gray-300 rounded-md block lg:inline lg:border-0">
                                     Dashboard
-                                </a>
+                                </button>
                             </li>
                                 <UserButton />
                             </SignedIn>

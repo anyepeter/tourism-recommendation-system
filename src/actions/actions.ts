@@ -99,6 +99,26 @@ export async function getAllSites() {
   }
 }
 
+export async function getSiteById(id: string) {
+  try {
+    const site = await prisma.site.findUnique({
+      where: { id },
+      include: {
+        category: true,
+        section: true,
+        hotels: true,
+      },
+    });
+    if (!site) {
+      throw new Error('Site not found');
+    }
+    return JSON.parse(JSON.stringify(site));
+  } catch (error) {
+    console.error('Error fetching site:', error);
+    throw new Error('Failed to fetch site');
+  }
+}
+
 export async function getAllSections() {
   try {
     const sections = await prisma.section.findMany();
@@ -171,5 +191,34 @@ export async function getUser(userId: string) {
   } catch (error) {
     console.error('Error fetching user:', error);
     throw new Error('Failed to fetch user');
+  }
+}
+
+export async function bookHotel(data: {
+  userId: string;
+  hotelId: string;
+  startDate: Date;
+  endDate: Date;
+}) {
+  try {
+    const booking = await prisma.book.create({
+      data: {
+        user: {
+          connect: { userId: data.userId }
+        },
+        hotel: {
+          connect: { id: data.hotelId }
+        },
+        startDate: data.startDate,
+        endDate: data.endDate
+      },
+      include: {
+        user: true,
+        hotel: true,
+      },
+    });
+    return JSON.parse(JSON.stringify(booking));
+  } catch (error) {
+    throw new Error('Failed to book hotel');
   }
 }

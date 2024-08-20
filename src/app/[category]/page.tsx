@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Card,
     CardContent,
@@ -34,19 +34,20 @@ const lakes = [
 ]
 
 export default function Page() {
-
+  const [isLoading, setIsLoading] = useState(true)
   const params = useParams()
   const category = params.category
 
-
   const sites = useSelector((state) => state.site.sites)
 
-  console.log(sites)
+  useEffect(() => {
+    if (sites.length > 0) {
+      setIsLoading(false)
+    }
+  }, [sites])
+
   const filteredSites = sites.filter(site => site.category.name === category);
-
-  console.log(filteredSites)
   
-
   return (  
     <section className='w-full mt-[5rem] overflow-hidden  sm:mt-10 lg:mt-10'>
        <div className='relative'>
@@ -64,33 +65,32 @@ export default function Page() {
 
 
         <main className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 lg:p-12">
-
-            {
+            {isLoading ? (
+                <div className="col-span-full flex justify-center items-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+                </div>
+            ) : filteredSites.length === 0 ? (
+                <p className="col-span-full text-center">No items for this category</p>
+            ) : (
                 filteredSites.map((site) => (
-                    <Card className='flex flex-col justify-between items-center gap-1  border-none'>
-                    <CardHeader>
-                        <CardTitle>{site.title}</CardTitle>
-                    </CardHeader>
-                      <div className='relative'>
-                        <Heart className='text-white absolute left-4 bottom-4' />
-                        <Image className='object-cover object-center lg:h-[300px] lg:w-[400px]' src={site.images[0]} width={400} height={100} alt='lake' />
+                    <Card key={site.title} className='flex flex-col justify-between items-center gap-1  border-none'>
+                        <CardHeader>
+                            <CardTitle>{site.title}</CardTitle>
+                        </CardHeader>
+                        <div className='relative'>
+                            <Heart className='text-white absolute left-4 bottom-4' />
+                            <Image className='object-cover object-center lg:h-[300px] lg:w-[400px]' src={site.images[0]} width={400} height={100} alt='lake' />
                         </div>
-                    <CardDescription className='p-3 text-center w-full max-w-[400px]'>
-                        {site.description[0]}
-                    </CardDescription>
-                    <CardFooter>
-                        <Link className='text-blue-800' href={
-                            {  pathname: `/${category}/${site.title}`,
-                               query: {
-                                    site: JSON.stringify(site),
-                                },
-                            }}>Read More</Link>
-                    </CardFooter>
-                </Card>
+                        <CardDescription className='p-3 text-center w-full max-w-[400px]'>
+                            {site.description[0]}
+                        </CardDescription>
+                        <CardFooter>
+                            <Link className='text-blue-800' href={`/${category}/${site.id}`}>Read More</Link>
+                        </CardFooter>
+                    </Card>
                 ))
-            }
-
-            </main>
-    </section>
+            )}
+        </main>   
+     </section>
   )
 }

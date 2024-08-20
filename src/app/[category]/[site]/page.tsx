@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import GooglesDetails from '@/components/ui/map'; // Adjust the path as necessary
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,6 +15,10 @@ import { CgWebsite } from 'react-icons/cg';
 import { MdEmail } from 'react-icons/md';
 import { Phone } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation'
+import { useUser } from '@clerk/nextjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { bookHotel, getSiteById, getUser } from '@/actions/actions';
+import { addUser } from '@/app/globalRedux/site/siteSlice';
 
 
 interface Hotel {
@@ -23,39 +27,34 @@ interface Hotel {
   address: string;
 }
 
-const hotelImages = [
-   '/images/lakes/imag2.png',
- '/images/lakes/image1.png',
-   '/images/lakes/image3.png',
-  '/images/lakes/image5.png',
-]
 
-const Page: React.FC = () => {
-  const searchParams = useSearchParams();
-  const siteQuery = searchParams.get('site');
-  const siteData = siteQuery ? JSON.parse(decodeURIComponent(siteQuery)) : null;
 
-  console.log(siteData)
-  // console.log(router.site)
-  // const { site } = router.query;
-  // console.log(site)
+const Page: React.FC =  () => {
+  const params = useParams()
+  const siteId = params.site
+  const [siteData, setSiteData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Parse the site object from the query string
-  // const siteData = site ? JSON.parse(site) : null;
-
-  // if (!siteData) {
-  //     return <div>Loading...</div>;
-  // }
+  useEffect(() => {
+    const fetchUser = async () => {
+      setIsLoading(true);
+      try {
+        const userData = await getSiteById(siteId);
+        setSiteData(userData);
+      } catch (error) {
+        console.error('Error fetching site data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUser();
+  }, [siteId]);
   
-  const service = {
-    position: {
-      lat: -37.8136,
-      lng: 144.9631,
-    },
-  };
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
+  const [isBooking, setIsBooking] = useState(false);
+  const [isReserved, setIsReserved] = useState(false);
 
   const openPopup = (hotel: Hotel) => {
     setSelectedHotel(hotel);
@@ -65,11 +64,40 @@ const Page: React.FC = () => {
   const closePopup = () => {
     setShowPopup(false);
     setSelectedHotel(null);
+    setIsReserved(false);
   };
 
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 2000 })
   )
+
+  const user = useSelector((state) => state.site.user)
+
+  const handleBookNow = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsBooking(true);
+    const formData = new FormData(event.currentTarget);
+    const startDate = new Date(formData.get('checkIn') as string).toISOString();
+    const endDate = new Date(formData.get('checkOut') as string).toISOString();
+    const bookingData = {
+      userId: user.userId,
+      hotelId: selectedHotel.id,
+      startDate: startDate,
+      endDate: endDate
+    };
+    try {
+      await bookHotel(bookingData);
+      setIsReserved(true);
+    } catch (error) {
+      console.error('Error booking hotel:', error);
+    } finally {
+      setIsBooking(false);
+    }
+  };
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
 
   return (
     <main className='flex justify-center mt-24 items-center'>
@@ -77,7 +105,7 @@ const Page: React.FC = () => {
         <div className='flex w-full justify-center items-center flex-col'>
           <div>
             <div className=''>
-              <h2 className='w-[300px] p-2 self-end bg-[#5C8C26B2] lg:text-4xl text-white'>{siteData.title}</h2>
+              <h2 className='w-[300px] p-2 self-end bg-[#5C8C26B2] lg:text-4xl text-white'>{siteData?.title}</h2>
             </div>
                   <Carousel 
                   plugins={[plugin.current]}
@@ -87,11 +115,11 @@ const Page: React.FC = () => {
                 >
                    <CarouselContent>
                     {
-                      siteData.images.map((image, index) => {
+                      siteData.images?.map((image, index) => {
                         return(
                           <CarouselItem key={index}>
                             <div className="w-full h-[200px]  lg:h-[500px] flex justify-center items-center">
-                            <Image key={index} src={image} className='md:w-[700px] lg:h-[500px] lg:w-[950px]' width={400} height={400} alt='lake' />
+                            <Image key={index} src={image} className='md:w-[700px] lg:h-[500px] lg:w-[950px] aspect-video' width={400} height={400} alt='lake' />
                             </div>
                           </CarouselItem>
                           
@@ -111,7 +139,7 @@ const Page: React.FC = () => {
           <Image src='/images/icons8-lake-481.png' width={50} height={50} alt='lake' />
           <ul className='list-disc flex flex-col gap-4 '>
             {
-              siteData.description.map((note, index) => {
+              siteData.description?.map((note, index) => {
                 return(
                   <li key={index}>{note}</li>
                 )
@@ -126,7 +154,7 @@ const Page: React.FC = () => {
             <h2>Activities carry out</h2>
             <ul className='list-decimal flex flex-col gap-4 '>
               {
-                siteData.activities.map((action, index) => (
+                siteData.activities?.map((action, index) => (
                   <li key={index}>{action}</li>
                 ))
               }
@@ -140,7 +168,7 @@ const Page: React.FC = () => {
             <div>
               <h2>Nearby Hotels</h2>
               <ul className='flex flex-col gap-4 w-full max-w-[400px]'>
-                {siteData.hotels.map((hotel, index) => (
+                {siteData.hotels?.map((hotel, index) => (
                   <li key={index} className='flex flex-col gap-0'>
                     <p className='font-bold'>{hotel.title}</p>
                     <p>{hotel.rate} star hotel</p>
@@ -244,12 +272,16 @@ const Page: React.FC = () => {
     </div>
 
             <h3 className='text-xl font-semibold mb-2'>Book this hotel</h3>
-            <form className='flex flex-col gap-4'>
-              <input type='text' placeholder='Name' className='border p-2 rounded' />
-              <input type='email' placeholder='Email' className='border p-2 rounded' />
-              <input type='date' placeholder='Check-in date' className='border p-2 rounded' />
-              <input type='date' placeholder='Check-out date' className='border p-2 rounded' />
-              <button type='submit' className='bg-[#5C8C26] text-white p-2 rounded'>Book Now</button>
+            <form method="POST" className='flex flex-col gap-4' onSubmit={handleBookNow}>
+              <input type='datetime-local' name='checkIn' placeholder='Check-in date' className='border p-2 rounded' />
+              <input type='datetime-local' name='checkOut' placeholder='Check-out date' className='border p-2 rounded' />
+              <button 
+                type='submit' 
+                className={`p-2 rounded ${isReserved ? 'bg-blue-500' : 'bg-[#5C8C26]'} text-white`}
+                disabled={isBooking || isReserved}
+              >
+                {isBooking ? 'Loading...' : isReserved ? 'Reserved' : 'Book Now'}
+              </button>
             </form>
             <button onClick={closePopup} className='mt-4 text-blue-800'>Close</button>
           </div>

@@ -33,8 +33,6 @@ const Nav = () => {
     fetchUser();
   }, [userId, dispatch]);
 
-
-
   return (
     <nav className='w-full flex justify-center z-[100] bg-slate-200 h-20 items-center  top-0 left-0 fixed'>
       <div className="w-full max-w-[1200px]  bg-slate-200 h-20 bg-dark flex justify-between items-center gap-2 sm:pl-4 pl-4 sm:pr-4 pr-4">
