@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { increment } from "./globalRedux/site/siteSlice";
 
 
-
 const category = [
   {
     id: 1,
@@ -59,6 +58,7 @@ export default   function Home() {
   
     fetchSites()
   }, [dispatch])
+
 
   return (
    <section className="bg-cover w-full bg-opacity-90 bg-center min-h-screen" style={{ backgroundImage: "linear-gradient(rgba(255, 255, 225, 0.5), rgba(255, 255, 255, 0.5)), url('/images/background.png')" }}>

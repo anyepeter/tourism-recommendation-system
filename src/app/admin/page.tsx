@@ -4,6 +4,8 @@ import { HotelIcon, HousePlusIcon, User2 } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { BiCommentCheck } from 'react-icons/bi'
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { useUser } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 
 import {
     ChartConfig,
@@ -43,40 +45,42 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
+export default function Page() {
+  
+    const  user = useUser();
 
+    if (user?.id !== 'user_2kLCMG7aZI6RRqCy4pK8FgnffaZ') {
+        redirect('/')
+    }
 
-export default  function page() {
     const [users, setUsers] = React.useState([])
     const [sites, setSites] = React.useState([])
     const [comments, setComments] = React.useState([])
     const [hotels, setHotels] = React.useState([])
     const [books, setBook] = React.useState([])
 
-
     useEffect(() => {
         const fetchData = async () => {
             setUsers(await getAllUsers())
             setComments(await getAllComments())
             setBook(await getAllBooks())
-
         }
-            fetchData()
+        fetchData()
     }, [])
 
     useEffect(() => {
         const fetchData = async () => {
             setSites(await getAllSites())
         }
-            fetchData()
+        fetchData()
     }, [])
 
     useEffect(() => {
         const fetchData = async () => {
             setHotels(await getAllHotels())
         }
-            fetchData()
+        fetchData()
     }, [])
-
 
     const commentsData = [
         { userName: 'John Doe', comment: 'Great article!', date: '2023-06-01', site: 'Blog A' },
@@ -84,9 +88,9 @@ export default  function page() {
         { userName: 'Mike Johnson', comment: 'Could use more details', date: '2023-06-03', site: 'Blog C' },
         { userName: 'Sarah Williams', comment: 'Excellent read', date: '2023-06-04', site: 'Blog D' },
     ]
+
     return (
         <section className="w-full">
-
             <h1 className='text-4xl'>Admin Dashboard</h1>
 
             <div className='grid mt-10 w-full gap-[1.5rem] sm:grid-cols-2 lg-[1350px]:grid-cols-4' >
@@ -98,7 +102,6 @@ export default  function page() {
                         <div className='p-1 pb-2'>
                             <p className='text-3xl'>{users.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Users</h3>
-
                         </div>
                     </CardContent>
                 </Card>
@@ -111,7 +114,6 @@ export default  function page() {
                         <div className='p-1 pb-2'>
                             <p className='text-3xl'>{sites.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Sites</h3>
-
                         </div>
                     </CardContent>
                 </Card>
@@ -124,7 +126,6 @@ export default  function page() {
                         <div className='p-1 pb-2'>
                             <p className='text-3xl'>{comments.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Comments</h3>
-
                         </div>
                     </CardContent>
                 </Card>
@@ -137,7 +138,6 @@ export default  function page() {
                         <div className='p-1 pb-2'>
                             <p className='text-3xl'>{hotels.length}</p>
                             <h3 className='text-sm text-zinc-500'>No Hotels</h3>
-
                         </div>
                     </CardContent>
                 </Card>
@@ -145,7 +145,6 @@ export default  function page() {
 
             <div className='flex flex-col lg:flex-row gap-9 mt-10'>
                 <div className='w-full bg-white'>
-
                     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
                         <BarChart accessibilityLayer data={chartData}>
                             <CartesianGrid vertical={false} />
@@ -164,13 +163,11 @@ export default  function page() {
                             <Bar dataKey="Grassfield" fill="var(--color-Grassfield)" radius={1} />
                         </BarChart>
                     </ChartContainer>
-
                 </div>
                  
                  <div  className='w-full flex  flex-col gap-5'>
                  <h1 className='text-2xl mt-10'>Hotels Booked</h1>
                 <Card className='overflow-x-scroll '>
-                
                     <table className='w-full text-sm min-w-[500px]  text-left border-collapse'>
                         <thead className="text-gray-600 bg-white font-medium border-b">
                             <tr>
@@ -194,9 +191,9 @@ export default  function page() {
                                 <tr>
                                     <td colSpan={4} className="border-none p-6 text-center">No reservations</td>
                                 </tr>
-                            )}                        </tbody>
+                            )}
+                        </tbody>
                     </table>
-
                 </Card>
                 </div>
             </div>
@@ -205,7 +202,6 @@ export default  function page() {
                 <h1 className='text-2xl mt-10'>Comments</h1>
                 <div className='mt-6 relative h-max p-4 overflow-x-auto'>
                 <Card className=' w-full '>
-
                     <table className='w-full text-sm  text-left border-collapse'>
                         <thead className="text-gray-600 bg-white font-medium border-b">
                             <tr>
@@ -229,13 +225,12 @@ export default  function page() {
                                 <tr>
                                     <td colSpan={4} className="border-none p-6 text-center">No comments</td>
                                 </tr>
-                            )}                        </tbody>
+                            )}
+                        </tbody>
                     </table>
-
                 </Card>
                 </div>
             </div>
-
         </section>
     )
 }
