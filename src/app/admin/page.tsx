@@ -50,7 +50,7 @@ export default function Page() {
   
     const  user = useUser();
 
-    if (user?.id !== 'user_2kLCMG7aZI6RRqCy4pK8FgnffaZ') {
+    if (user.user.id !== 'user_2kLCMG7aZI6RRqCy4pK8FgnffaZ') {
         redirect('/')
     }
 
