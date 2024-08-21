@@ -1,13 +1,11 @@
 // @ts-nocheck
-// import { prisma } from '@/lib/db';
+import { prisma } from '@/lib/db';
 import { NextResponse } from 'next/server';
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
 
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+const {WEBHOOK_SECRET} = process.env;
 
 // Clerk Webhook: create or delete a user in the database by Clerk ID
 export async function POST(req: Request) {
@@ -35,23 +33,26 @@ export async function POST(req: Request) {
             "svix-signature": svix_signature,
         });
         
-        const { id: clerkUserId, first_name, last_name, email_addresses } = evt.data;
-        const email = email_addresses[0].email_address;
+        const { id: clerkUserId } = evt.data;
 
-
+        console.log(evt.type)
         // Using prisma to send evt.id to the user table
         switch (evt.type) {
             case 'user.created':
+                const { first_name: first, last_name: last, email_addresses: email_add } = evt.data;
+                const emails = email_add[0].email_address;
                 const user = await prisma.user.create({
                     data: { 
                         clerkUserId,
-                        lastName: last_name || null,
-                        firstName: first_name || null,
-                        email: email
+                        lastName: last || null,
+                        firstName: first || null,
+                        email: emails
                      }
                 })
                 return NextResponse.json({ user })
             case 'user.updated':
+                const { first_name, last_name, email_addresses } = evt.data;
+                const email = email_addresses[0].email_address;
                 const updatedUser = await prisma.user.update({
                     where: { clerkUserId },
                    

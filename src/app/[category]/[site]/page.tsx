@@ -41,6 +41,9 @@ const Page: React.FC =  () => {
       try {
         const userData = await getSiteById((siteId));
         setSiteData(userData);
+        if (Object.keys(userData).length === 0) {
+          window.location.reload();
+        }
       } catch (error) {
         console.error('Error fetching site data:', error);
       } finally {
