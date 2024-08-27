@@ -2,6 +2,35 @@
 
 import { prisma } from "@/lib/db";
 
+// import { Configuration, OpenAIApi } from 'openai';
+
+
+// const configuration = new Configuration({
+//   apiKey: process.env.OPENAI_API_KEY,
+// });
+// const openai = new OpenAIApi(configuration);
+
+// export async function POST(req: Request) {
+//   const { userInput } = await req.json();
+
+//   let responseText = '';
+
+//   if (userInput.toLowerCase().includes('recommend') || userInput.toLowerCase().includes('visit')) {
+//     // Query from Prisma (Supabase)
+//     const sites = await prisma.site.findMany();
+//     responseText = `Here are some recommended sites: ${sites.map(site => site.title).join(', ')}`;
+//   } else {
+//     // Use OpenAI for general questions
+//     const aiResponse = await openai.createCompletion({
+//       model: 'text-davinci-003',
+//       prompt: userInput,
+//       max_tokens: 150,
+//     });
+//     responseText = aiResponse.data.choices[0].text.trim();
+//   }
+
+//   return responseText;
+// });
 export async function getAllUsers() {
   try {
     const users = await prisma.user.findMany({

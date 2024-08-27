@@ -78,7 +78,7 @@ useEffect(() => {
                       {site.description[0]}
                   </CardDescription>
                   <CardFooter>
-                      <Link className='text-blue-800' href={`/site/${site._id}`}>Read More</Link>
+                      <Link className='text-blue-800' href={`/site/${site.id}`}>Read More</Link>
                   </CardFooter>
                 </Card>
               )) : (
